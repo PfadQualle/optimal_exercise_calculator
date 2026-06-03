@@ -1,4 +1,26 @@
+## ---------------------------
+##
+## Script name: app.R
+##
+## Purpose of script: This script contains the front end of the optimal exercise calculator 
+##
+## Author: Niklas V. Lehmann
+##
+## Date Created: 2026-06-02
+##
+## Copyright (c) Niklas V. Lehmann, 2026
+## Email: niklasl.2306@gmail.com
+##
+## ---------------------------
+##
+## Notes: 
+##   
+##
+## ---------------------------
+
 library(shiny)
+
+rsconnect::writeManifest()
 
 source("~/Documents/Projekte/Kurzprojekte/Optimal_Exercise_Calculator/Optimal_exercise_calculator_backend.R")
 
@@ -6,7 +28,7 @@ intensity_choices <- c(
   "Walking (3 METs)"                        = 2,
   "Brisk hiking (4 METs)"                   = 3,
   "Weight lifting, Yoga (intense) (5 METs)" = 4,
-  "Moderate cycling (6 METs)"               = 6,
+  "Moderate cycling (6 METs)"               = 5,
   "Jogging (8 METs)"                        = 7,
   "Basketball game (10 METs)"               = 9
 )
