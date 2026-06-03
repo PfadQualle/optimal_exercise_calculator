@@ -22,7 +22,7 @@ library(shiny)
 
 rsconnect::writeManifest()
 
-source("~/Documents/Projekte/Kurzprojekte/Optimal_Exercise_Calculator/Optimal_exercise_calculator_backend.R")
+source("Optimal_exercise_calculator_backend.R")
 
 intensity_choices <- c(
   "Walking (3 METs)"                        = 2,
