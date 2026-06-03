@@ -1,19 +1,7 @@
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    https://shiny.posit.co/
-#
-
 library(shiny)
 
+source("~/Documents/Projekte/Kurzprojekte/Optimal_Exercise_Calculator/Optimal_exercise_calculator_backend.R")
 
-# ---- Source your backend ----
-source("~/Documents/Projekte/Kurzprojekte/Optimal_Exercise_Calculator/Optimal_exercise_calculator_backend.R")   # contains optimal_exercise functions
-
-
-# ---- Intensity presets ----
 intensity_choices <- c(
   "Walking (3 METs)"                        = 2,
   "Brisk hiking (4 METs)"                   = 3,
@@ -23,10 +11,14 @@ intensity_choices <- c(
   "Basketball game (10 METs)"               = 9
 )
 
-
-
-# ---- UI ----
 ui <- fluidPage(
+  tags$style(HTML("
+    .form-group { margin-bottom: 20px; }
+    .help-block { color: #666; font-size: 13px; line-height: 1.5; }
+    .well-result { background-color: #f0f7ff; border: 1px solid #b8d4f0;
+                   padding: 20px; border-radius: 6px; margin-top: 20px; }
+  ")),
+  
   titlePanel("Optimal Exercise Calculator"),
   
   sidebarLayout(
@@ -38,51 +30,51 @@ ui <- fluidPage(
                   choices = intensity_choices, selected = 4),
       
       sliderInput("utility", "Utility: How unpleasant is exercise to you?",
-                  min = -1, max = 1, value = 0.9, step = 0.1,
-                  ticks = FALSE),
-      
-      helpText("0 = unconsciousness is equivalent;
-               0.50 = quite disliked;
-               1 = as fun as alternatives;
-               -1 = substantial suffering and misery.",
-               "Each hour/week reduces per-period utility by this fraction."),
+                  min = -1, max = 1, value = 0.9, step = 0.1, ticks = FALSE),
+      helpText(
+        "1 = as fun as alternatives",   br(),
+        "0.5 = quite disliked",         br(),
+        "0 = equivalent to unconsciousness", br(),
+        "-1 = substantial suffering and misery.", br(), br(),
+        "Each hour/week reduces per-period utility by this fraction."
+      ),
       
       sliderInput("r", "Discount rate (per year):",
                   min = 0, max = 0.12, value = 0.02, step = 0.005),
-      helpText("How much less you value future years vs. today. ",
-               "0 = future and present equal; 0.03 = standard health economics; 0.06 = standard adult ; 0.12 short-term focus",
-               "Discount rates ONLY reflect impatience(time preference) and tech progress expectations. Mortality risk is already being accounted for!")
+      helpText(
+        "How much less you value future years vs. today.", br(),
+        "0 = future and present equal", br(),
+        "0.03 = standard health economics", br(),
+        "0.06 = standard adult", br(),
+        "0.12 = short-term focus", br(), br(),
+        tags$em("Note: discount rates reflect impatience and tech progress expectations only.
+                 Mortality risk is already accounted for.")
+      )
     ),
     
     mainPanel(
-      h3(textOutput("recommendation")))
+      div(class = "well-result",
+          h3(textOutput("recommendation"))
+      )
+    )
   )
 )
 
-
-
-# Define server logic required to draw a histogram
 server <- function(input, output) {
-
+  
   result <- reactive({
-    optimal_exercise <- optimal_exercise_max(
-      u_rel    = as.numeric(input$utility),
-      age   = as.numeric(input$age),
+    optimal_exercise_max(
+      u_rel     = as.numeric(input$utility),
+      age       = as.numeric(input$age),
       intensity = as.numeric(input$intensity),
-      r    = as.numeric(input$r)
+      r         = as.numeric(input$r)
     )
-    optimal_exercise
   })
-
   
   output$recommendation <- renderText({
-    res <- result()
     sprintf("Your optimal level of exercise is %.1f hours per week at the specified intensity.",
-            res)
+            result())
   })
-  
-
 }
 
-# Run the application 
 shinyApp(ui = ui, server = server)
