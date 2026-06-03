@@ -34,7 +34,7 @@ HOURS_WK  <- 168
 # Function from Garcia et. al. (2023) https://bjsm.bmj.com/content/bjsports/57/15/979.full.pdf
 
 
-garcia <- read_csv("~/Documents/Projekte/Kurzprojekte/Optimal_Exercise_Calculator/total-population-all-cause-mortality-fatal-q-0.95.csv")  # columns: dose, hr, hr_lo, hr_hi
+garcia <- read_csv("total-population-all-cause-mortality-fatal-q-0.95.csv")  # columns: dose, hr, hr_lo, hr_hi
 
 
 
